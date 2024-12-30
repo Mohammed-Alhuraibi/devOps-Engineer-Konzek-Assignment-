@@ -18,10 +18,10 @@ spec:
       - name: web-application
         image: nginx:1.19
         ports:
-        - containerPort: 80  # Wrong port - nginx listens on 80
+        - containerPort: 80  
         resources:
           requests:
-            memory: "64Mi"      # Over-allocated resources
+            memory: "64Mi"      
             cpu: "250m"
           limits:
             memory: "128Mi"
