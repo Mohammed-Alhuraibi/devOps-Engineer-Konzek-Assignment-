@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-http-server
+  labels:
+    app: simple-http-server
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simple-http-server
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: simple-http-server
+    spec:
+      containers:
+      - name: simple-http-server
+        image: alhuraibisaeed/simple-http-server:latest
+        ports:
+        - containerPort: 8000
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10

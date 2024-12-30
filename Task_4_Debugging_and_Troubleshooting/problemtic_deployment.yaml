@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-application
+  labels:
+    app: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web-application
+        image: nginx:1.19
+        ports:
+        - containerPort: 8080  # Wrong port - nginx listens on 80
+        resources:
+          requests:
+            memory: "1000Gi"      # Over-allocated resources
+            cpu: "100000m"
+          limits:
+            memory: "20000Gi"
+            cpu: "200000m"
+        env:
+        - name: DB_PASSWORD    # Sensitive data exposed in plain text
+          value: "secretpassword123"
+        - name: DB_HOST
+          value: "db-service"
+        - name: NGINX_PORT     # Incorrect environment variable
+          value: "8080"

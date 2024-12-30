@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-application
+  labels:
+    app: web-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: web-app
+  template:
+    metadata:
+      labels:
+        app: web-app
+    spec:
+      containers:
+      - name: web-application
+        image: nginx:1.19
+        ports:
+        - containerPort: 80  # Wrong port - nginx listens on 80
+        resources:
+          requests:
+            memory: "64Mi"      # Over-allocated resources
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: web-app-secrets
+              key: db-password
